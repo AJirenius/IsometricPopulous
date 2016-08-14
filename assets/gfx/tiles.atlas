@@ -1,0 +1,48 @@
+images {
+  image: "/assets/gfx/0001.png"
+}
+images {
+  image: "/assets/gfx/0010.png"
+}
+images {
+  image: "/assets/gfx/0011.png"
+}
+images {
+  image: "/assets/gfx/0100.png"
+}
+images {
+  image: "/assets/gfx/0101.png"
+}
+images {
+  image: "/assets/gfx/0110.png"
+}
+images {
+  image: "/assets/gfx/0111.png"
+}
+images {
+  image: "/assets/gfx/1000.png"
+}
+images {
+  image: "/assets/gfx/1001.png"
+}
+images {
+  image: "/assets/gfx/1010.png"
+}
+images {
+  image: "/assets/gfx/1011.png"
+}
+images {
+  image: "/assets/gfx/1100.png"
+}
+images {
+  image: "/assets/gfx/1101.png"
+}
+images {
+  image: "/assets/gfx/1110.png"
+}
+images {
+  image: "/assets/gfx/1111.png"
+}
+margin: 0
+extrude_borders: 0
+inner_padding: 0

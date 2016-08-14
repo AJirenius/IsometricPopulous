@@ -1,0 +1,40 @@
+go.property("grid_pos", vmath.vector3() )
+
+local grid = require "game.core.grid"
+
+function init(self)
+	--msg.post("#dot", "disable")
+	self.tile = grid.grid[self.grid_pos.x][self.grid_pos.y]
+	if self.tile.square == nil then 
+		msg.post("#sprite", "disable")
+		return 
+	end
+	-- check min / max
+	local min = self.tile.height
+	local max = self.tile.height
+	
+	for i,t in ipairs(self.tile.square) do
+		if t.height > max then max = t.height end
+		if t.height < min then min = t.height end
+	end
+	
+	local str = ""
+	for i,t in ipairs(self.tile.square) do
+		if t.height == max then 
+			str = "1"..str
+		else
+			str = "0"..str
+		end 
+	end
+	-- print(self.tile.height)
+	-- master point
+	if self.tile.height == max then 
+			str = str .. "1"
+		else
+			str = str .. "0"
+		end 
+	
+	msg.post("#sprite", "play_animation", { id = hash(str)} )
+	
+	
+end

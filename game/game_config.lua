@@ -1,0 +1,6 @@
+local M = {}
+
+M.TILE_WIDTH = 128
+M.TILE_HEIGHT = 64
+M.HEIGHT_OFFSET = 32
+return M
