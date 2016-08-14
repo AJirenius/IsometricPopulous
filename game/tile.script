@@ -2,13 +2,8 @@ go.property("grid_pos", vmath.vector3() )
 
 local grid = require "game.core.grid"
 
-function init(self)
-	--msg.post("#dot", "disable")
-	self.tile = grid.grid[self.grid_pos.x][self.grid_pos.y]
-	if self.tile.square == nil then 
-		msg.post("#sprite", "disable")
-		return 
-	end
+local function update_sprite(self)
+	if self.tile.square == nil then return end
 	-- check min / max
 	local min = self.tile.height
 	local max = self.tile.height
@@ -35,6 +30,24 @@ function init(self)
 		end 
 	
 	msg.post("#sprite", "play_animation", { id = hash(str)} )
-	
-	
+end
+
+function init(self)
+	msg.post("#dot", "disable")
+	self.tile = grid.grid[self.grid_pos.x][self.grid_pos.y]
+	if self.tile.square == nil then 
+		msg.post("#sprite", "disable")
+		return 
+	end
+	update_sprite(self)
+end
+
+function on_message(self, message_id, message, sender)
+    if message_id == hash("show_dot") then
+    	msg.post("#dot", "enable")	
+    elseif message_id == hash("hide_dot") then
+    	msg.post("#dot", "disable")
+    elseif message_id == hash("update_sprite") then
+    	update_sprite(self)
+    end
 end
