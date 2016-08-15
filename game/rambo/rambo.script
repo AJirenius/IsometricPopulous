@@ -1,0 +1,65 @@
+local grid = require "game.core.grid"
+
+go.property("current_tile", vmath.vector3(5,5,0))
+go.property("tile_progress",0)
+
+function init(self)
+	msg.post("#sprite", "play_animation", {id = hash("idle")})
+end
+
+local function play_animation(v)
+	local str = ""
+	if v.y == 1 then str = str.."n" end
+	if v.y == -1 then str = str.."s" end
+	if v.x == 1 then str = str.."e" end
+	if v.x == -1 then str = str.."w" end
+	msg.post("#sprite", "play_animation", {id = hash("walk_"..str)})
+end
+
+local function next_step(self)
+	if self.end_tile.x == self.current_tile.x and self.end_tile.y == self.current_tile.y then
+		self.is_walking = false
+		msg.post("#sprite", "play_animation", {id = hash("idle")})
+		return
+	end
+	self.is_walking = true
+	
+	-- creating movement vector (which direction to move to next gridtile)
+	local v = vmath.vector3(0,0,0)
+	if self.end_tile.x > self.current_tile.x then 
+		v.x = 1
+	elseif self.end_tile.x < self.current_tile.x then
+		v.x = -1
+	end
+	if self.end_tile.y > self.current_tile.y then 
+		v.y = 1
+	elseif self.end_tile.y < self.current_tile.y then
+		v.y = -1
+	end
+	
+	play_animation(v)
+	
+	self.walk_tile = self.current_tile + v
+	self.tile_progress = 0
+	self.current_tile_pos = go.get_position()--grid.grid[self.current_tile.x][self.current_tile.y].pos
+	self.walk_tile_pos = grid.grid[self.walk_tile.x][self.walk_tile.y].pos
+	go.animate("#script", "tile_progress", go.PLAYBACK_ONCE_FORWARD, 1, go.EASING_LINEAR, 1, 0, function() 
+		self.current_tile = self.walk_tile
+		next_step(self) 
+	end)
+end
+
+function update(self, dt)
+    if self.is_walking == true then
+    	go.set_position(vmath.lerp(self.tile_progress, self.current_tile_pos, self.walk_tile_pos))
+    else
+    	go.set_position(grid.grid[self.current_tile.x][self.current_tile.y].pos )
+    end
+end
+
+function on_message(self, message_id, message, sender)
+    if message_id == hash("move_to") then
+    	self.end_tile = message.grid_pos
+    	next_step(self)
+    end
+end

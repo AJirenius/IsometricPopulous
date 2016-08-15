@@ -2,6 +2,7 @@ local M = {}
 local config = require "game.game_config"
 
 local grid = {}
+M.grid = grid
 local width = 10
 local height = 10
 local offset_x = 640
@@ -64,7 +65,7 @@ end
 
 
 function M.create()
-	M.grid = grid
+	
 	
 	-- Create logic tile (one master point)
 	for x = 1 , width do

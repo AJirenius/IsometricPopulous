@@ -2,20 +2,9 @@ local grid = require "game.core.grid"
 
 function init(self)
 	msg.post(".", "acquire_input_focus")
+	self.rambo = go.get_id("/rambo")
     grid.create()
 end
-
-function final(self)
-    -- Add finalization code here
-    -- Remove this function if not needed
-end
-
-function update(self, dt)
-    -- Add update code here
-    -- Remove this function if not needed
-end
-
-
 
 function on_input(self, action_id, action)	
 	-- movement
@@ -26,16 +15,21 @@ function on_input(self, action_id, action)
    	msg.post(t.view, "show_dot")
    	self.previous_tile = t  
    	
-   	if action.pressed == true then
+   	
+   	if action_id == hash("shift") and action.pressed == true then
+   			self.shift_down = true
+   		elseif action_id == hash("shift") and action.released == true then   		
+   			self.shift_down = false
+   		end
+   	if action.pressed == true then   		
    		if action_id == hash("raise") then
-   			grid.adjust_height(self.previous_tile, 1)
+   			if self.shift_down == true then
+   				msg.post(self.rambo, "move_to", { grid_pos = vmath.vector3(self.previous_tile.grid_x, self.previous_tile.grid_y, 0 )})
+   			else
+ 	  			grid.adjust_height(self.previous_tile, 1)		
+   			end
    		elseif action_id == hash("lower") then
    			grid.adjust_height(self.previous_tile, -1)
    		end
    	end
-end
-
-function on_reload(self)
-    -- Add reload-handling code here
-    -- Remove this function if not needed
 end

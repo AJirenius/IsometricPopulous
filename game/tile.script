@@ -21,7 +21,7 @@ local function update_sprite(self)
 			str = "0"..str
 		end 
 	end
-	-- print(self.tile.height)
+	
 	-- master point
 	if self.tile.height == max then 
 			str = str .. "1"
